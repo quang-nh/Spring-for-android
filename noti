@@ -1,0 +1,51 @@
+package fjn.vn.fjnairdroid.utils;
+
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Context;
+import android.content.Intent;
+import android.support.v4.app.NotificationCompat;
+
+import fjn.vn.fjnairdroid.Main;
+
+/**
+ * Created by quang-nh on 2017/04/10.
+ * ${name} define process of ...
+ */
+
+public class Noti {
+
+    public static void showMsgNoti(Context context, String msgContent) {
+        NotificationCompat.Builder builder =
+                new NotificationCompat.Builder(context)
+                        .setSmallIcon(android.R.drawable.ic_dialog_email)
+                        .setContentTitle("Gửi tin nhắn")
+                        .setContentText(msgContent);
+
+        Intent notificationIntent = new Intent(context, Main.class);
+        PendingIntent contentIntent = PendingIntent.getActivity(context, 0, notificationIntent,
+                PendingIntent.FLAG_UPDATE_CURRENT);
+        builder.setContentIntent(contentIntent);
+
+        // Add as notification
+        NotificationManager manager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+        manager.notify(0, builder.build());
+    }
+    public static void showFileNoti(Context context, String msgContent) {
+        NotificationCompat.Builder builder =
+                new NotificationCompat.Builder(context)
+                        .setSmallIcon(android.R.drawable.ic_dialog_email)
+                        .setContentTitle("Gửi file :")
+                        .setContentText(msgContent);
+
+        Intent notificationIntent = new Intent(context, Main.class);
+        PendingIntent contentIntent = PendingIntent.getActivity(context, 0, notificationIntent,
+                PendingIntent.FLAG_UPDATE_CURRENT);
+        builder.setContentIntent(contentIntent);
+
+        // Add as notification
+        NotificationManager manager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+        manager.notify(0, builder.build());
+    }
+
+}
