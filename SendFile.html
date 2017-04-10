@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>SMS Form</title>
+    <style>
+        body {
+            width : 90%;
+            margin : 0 auto;
+            color : white;
+            font-size: 16px;
+            margin-top : 10%;
+        }
+
+        @media screen and (min-width: 600px) {
+            body {
+                 width : 80%;
+            }
+        }
+
+
+        #selectFile {
+            width : 100%;
+            min-height : 200px;;
+            background : #9a9a9a;
+        }
+
+        #drop_zone {
+            border: 2px dashed #fff;
+            width : 100%;
+            min-height : 200px;;
+            background : #9a9a9a;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+
+
+        input[type="submit"] {
+            font-size: 20px;
+            width : 100%;
+            height : 40px;
+            border-bottom: solid 1px red;
+            border-left: solid 2px #9a9a9a;
+            border-right: solid 1px #9a9a9a;
+            border-top: solid 1px #9a9a9a;
+            z-index: 10;
+            box-shadow: 0px 2px blue;
+        }
+
+        input[type="submit"]:hover, .p:focus {
+            z-index: 100;
+            box-shadow: -10px 0px blue;
+        }
+
+    </style>
+    <script>
+        document.onreadystatechange = function () {
+            var flag = false;
+            if (window.File && window.FileReader && window.FileList && window.Blob) {
+                flag = true;
+            } else {
+              alert('File APIs không được support trong trình duyệt này.');
+            }
+
+            if (flag == true) {
+                document.getElementById('filesSelect').addEventListener('change', handleFileSelect, false);
+
+                var dropZone = document.getElementById('drop_zone');
+                dropZone.addEventListener('dragover', handleDragOver, false);
+                dropZone.addEventListener('drop', handleFileDrop, false);
+            }
+
+            function handleFileSelect(evt) {
+                var files = evt.target.files;
+
+                var output = [];
+                for (var i = 0, f; f = files[i]; i++) {
+                  output.push('<li><strong>', f.name, '</strong> (', f.type || 'n/a', ') - ',
+                              f.size, ' bytes, last modified: ',
+                              f.lastModifiedDate ? f.lastModifiedDate.toLocaleDateString() : 'n/a',
+                              '</li>');
+                }
+                document.getElementById('listSelect').innerHTML = '<ul>' + output.join('') + '</ul>';
+            }
+
+            function handleFileDrop(evt) {
+                evt.stopPropagation();
+                evt.preventDefault();
+
+                var files = evt.dataTransfer.files;
+
+                var output = [];
+                for (var i = 0, f; f = files[i]; i++) {
+                    output.push('<li><strong>', f.name, '</strong> (', f.type || 'n/a', ') - ',
+                          f.size, ' bytes, last modified: ',
+                          f.lastModifiedDate ? f.lastModifiedDate.toLocaleDateString() : 'n/a',
+                          '</li>');
+                }
+                document.getElementsByTagName('label')[0].style.visibility = 'hidden';
+                document.getElementById('listDrop').innerHTML = '<ul>' + output.join('') + '</ul>';
+            }
+
+            function handleDragOver(evt) {
+                evt.stopPropagation();
+                evt.preventDefault();
+                evt.dataTransfer.dropEffect = 'copy';
+            }
+        }
+    </script>
+</head>
+<body>
+<form method="post" enctype="multipart/form-data" >
+    <div id="selectFile">
+        <input type="file" id="filesSelect" name="files" multiple="true" />
+        <output id="listSelect"></output>
+    </div>
+    <br>
+    <div id="drop_zone">
+        <label> Kéo file vào đây :)</label>
+        <output id="listDrop"></output>
+    </div>
+    <<br>
+    <input type="submit" value="Gửi file đếm điện thọai">
+</form>
+</body>
+</html>
