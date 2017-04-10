@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>SMS Form</title>
+    <style>
+        body {
+            width : 90%;
+            margin : 0 auto;
+            font-style: italic;
+            font-size: 20px;
+            z-index: 0;
+        }
+
+        table, form {
+            width : 100%;
+            margin-top : 20%;
+        }
+
+        table td {
+            border: none;
+            border-spacing: 0;
+        }
+
+        table  td:nth-child(odd){
+            width: 20%;
+        }
+        table  td:nth-child(even){
+            width: 80%;
+        }
+
+        table tr {
+            height : 40px;
+        }
+
+        label {
+
+            width: 100%;
+        }
+        .p {
+            font-size: 20px;
+            width : 100%;
+            height : 40px;
+            border-bottom: solid 1px red;
+            border-left: solid 2px #9a9a9a;
+            border-right: solid 1px #9a9a9a;
+            border-top: solid 1px #9a9a9a;
+            z-index: 10;
+            box-shadow: 0px 2px blue;
+        }
+
+        .p:hover, .p:focus {
+            z-index: 100;
+            box-shadow: -10px 0px blue;
+        }
+
+        .m {
+            width : 99.5%;
+            border-bottom: solid 1px red;
+            border-left: solid 2px #9a9a9a;
+            border-right: solid 1px #9a9a9a;
+            border-top: solid 1px #9a9a9a;
+            z-index: 10;
+            box-shadow: 0px 2px blue;
+        }
+
+        .m:hover, .m:focus {
+            z-index: 100;
+            box-shadow: -10px 0px blue;
+        }
+
+        input[type="submit"] {
+            border-bottom: solid 2px red;
+            width : 30%;
+            text-align : center;
+            margin-left : 70%;
+        }
+    </style>
+</head>
+<body>
+<form method="post">
+    <table>
+        <tr>
+            <td>
+                <label>
+                    Số điện thoại :
+                </label>
+            </td>
+            <td >
+                <input class="p" type="text" name="phone_number"/>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <label>
+                    Tin nhắn :
+                </label>
+            </td>
+            <td >
+                <textarea class="m" rows="5" cols="100" name="message" ></textarea>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <input type="submit" value="Send"/>
+            </td>
+        </tr>
+    </table>
+</form>
+</body>
+</html>
