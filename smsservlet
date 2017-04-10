@@ -1,0 +1,81 @@
+package fjn.vn.fjnairdroid.servlet;
+
+import android.content.Context;
+import android.telephony.SmsManager;
+
+import java.io.IOException;
+import java.io.PrintWriter;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import fjn.vn.fjnairdroid.utils.Noti;
+import fjn.vn.fjnairdroid.utils.Utils;
+
+/**
+ * Created by quang-nh on 2017/04/03.
+ * ${name} define process of ...
+ */
+
+public class SmsServlet extends HttpServlet {
+
+    private static final long serialVersionUID = -61789602L;
+
+    Context context;
+
+    public SmsServlet(Context context) {
+        this.context = context;
+    }
+
+    /**
+     * This method is called when the user enters the URL in the
+     * browser.
+     */
+    @Override
+    protected void doGet(HttpServletRequest req,
+                         HttpServletResponse resp)
+            throws ServletException, IOException {
+
+        resp.setContentType("text/html");
+        resp.setStatus(HttpServletResponse.SC_OK);
+        resp.setCharacterEncoding("UTF-8");
+        resp.getWriter().print(Utils.readHtmlToString(context.getAssets().open("SendSms.html")));
+
+    }
+
+    /**
+     * This method is called when the 'Send' button is pressed
+     */
+    @Override
+    protected void doPost(HttpServletRequest req,
+                          HttpServletResponse resp)
+            throws ServletException, IOException {
+        resp.setContentType("text/html");
+        resp.setStatus(HttpServletResponse.SC_OK);
+        PrintWriter out = resp.getWriter();
+        String phoneNumber = req.getParameter("phone_number");
+        String message = req.getParameter("message");
+
+        if (phoneNumber == null || message == null) {
+            out.println("Invalid input");
+            return;
+        }
+        sendSMS(phoneNumber, message);
+
+        out.println("<html>" +
+                "<title>SMS Form</title>" +
+                "<body>" +
+                "Message sent to " + phoneNumber +
+                "</body>" +
+                "</html>");
+
+        Noti.showMsgNoti(context,phoneNumber + "\n" + message);
+    }
+
+    private void sendSMS(String phoneNumber, String message) {
+        SmsManager sms = SmsManager.getDefault();
+        sms.sendTextMessage(phoneNumber, null, message, null, null);
+    }
+}
