@@ -1,0 +1,91 @@
+package fjn.vn.fjnairdroid.servlet;
+
+import android.content.Context;
+
+import org.apache.commons.fileupload.FileItem;
+import org.apache.commons.fileupload.FileUploadException;
+import org.apache.commons.fileupload.disk.DiskFileItemFactory;
+import org.apache.commons.fileupload.servlet.ServletFileUpload;
+import org.apache.commons.io.FilenameUtils;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.List;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import fjn.vn.fjnairdroid.utils.Noti;
+import fjn.vn.fjnairdroid.utils.Utils;
+
+/**
+ * Created by quang-nh on 2017/04/03.
+ * ${name} define process of ...
+ */
+
+public class FileServlet extends HttpServlet {
+
+    private static final long serialVersionUID = -61789602L;
+
+    Context context;
+
+    public FileServlet(Context context) {
+        this.context = context;
+    }
+
+    /**
+     * This method is called when the user enters the URL in the
+     * browser.
+     */
+    @Override
+    protected void doGet(HttpServletRequest req,
+                         HttpServletResponse resp)
+            throws ServletException, IOException {
+
+        resp.setContentType("text/html");
+        resp.setStatus(HttpServletResponse.SC_OK);
+        resp.setCharacterEncoding("UTF-8");
+        resp.getWriter().print(Utils.readHtmlToString(context.getAssets().open("SendFile.html")));
+
+    }
+
+    /**
+     * This method is called when the 'Send' button is pressed
+     */
+    @Override
+    protected void doPost(HttpServletRequest req,
+                          HttpServletResponse resp)
+            throws ServletException, IOException {
+        resp.setContentType("text/html");
+        resp.setStatus(HttpServletResponse.SC_OK);
+        resp.setCharacterEncoding("UTF-8");
+        StringBuilder sb = new StringBuilder();
+
+        try {
+            List<FileItem> items = new ServletFileUpload(new DiskFileItemFactory()).parseRequest(req);
+            for (FileItem item : items) {
+                if (item.isFormField()) {
+                    // Process regular form field (input type="text|radio|checkbox|etc", select, etc).
+                    String fieldName = item.getFieldName();
+                    String fieldValue = item.getString();
+                    // ... (do your job here)
+                } else {
+                    // Process form file field (input type="file").
+                    String fieldName = item.getFieldName();
+                    String fileName = FilenameUtils.getName(item.getName());
+                    InputStream fileContent = item.getInputStream();
+
+                    Utils.saveFile(context, fileName, fileContent);
+                    sb.append(fieldName + "\n");
+                }
+            }
+        } catch (FileUploadException e) {
+            e.printStackTrace();
+        }
+
+        resp.getWriter().print(Utils.readHtmlToString(context.getAssets().open("SendFileInfo.html")));
+        Noti.showFileNoti(context, sb.toString());
+    }
+}
